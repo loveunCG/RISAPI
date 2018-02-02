@@ -1,0 +1,14 @@
+{
+	"secret": "eyJ1c3JfaWQiOiJxd2UiLCJ1c3JfcGFzc3dkIjoiZWZlNjM5ODEyNzkyOGYxYj",
+	"sms_content": "【影象云】账号注册验证码: ",
+	"smsUri": "http://api.smsbao.com/sms?u=huange&p=efbe1f2c1925f8b0a4b2d7fb63c00301",
+	"dbconfig":{
+		"client":"mysql",
+		"connection":{
+			"host":"localhost",
+			"user":"root",
+			"database":"pacs/ris",
+			"password":""
+		}
+	}
+}
