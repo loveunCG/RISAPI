@@ -24,7 +24,6 @@ export default class Auth {
 		return patient
 	}
 
-
 	registerPatient(data) {
 		let patient = this.DBCon.insert(data).into('tbl_patient')
 		return patient
@@ -50,6 +49,7 @@ export default class Auth {
 
 		}
 	}
+
 	getUserRole(query) {
 		let userRole = []
 		if (query) {
@@ -58,6 +58,23 @@ export default class Auth {
 			userRole = this.DBCon('tbl_role').select();
 		}
 		return userRole;
+	}
+
+	checkPhoneNumber(query) {
+		return this.DBCon('tbl_phone_verify').where(query).select();
+	}
+
+	updatePhoneVerify(data, isSave) {
+		let query = {
+			phonenum: data.phonenum
+		};
+		if (!isSave) {
+			console.log('insert');
+			return this.DBCon('tbl_phone_verify').insert(data);
+		} else {
+			console.log('update');
+			return this.DBCon('tbl_phone_verify').where(query).update(data);
+		}
 	}
 
 }

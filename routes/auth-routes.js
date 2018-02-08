@@ -29,3 +29,7 @@ app.get('/forget', function(req, res){
 app.get('/sendSMS', function (req, res) {
 	auths.SendSMS(req,res)
 });
+
+app.get('/getRole', function(req, res){
+	auths.getUserRole();
+});

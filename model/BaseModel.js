@@ -108,18 +108,18 @@ export default class BaseModel {
 					"checkup_status",
 					"checkup_item",
 					"checkup_time",
-					"checkup_cost", 
-					"chc_id"
-					);
-		} else {
-			checkList = this.DBCon.from('tbl_check_list').select(
-					"checkup_equipment",
-					"checkup_status",
-					"checkup_item",
-					"checkup_time",
 					"checkup_cost",
 					"chc_id"
-					);
+				);
+		} else {
+			checkList = this.DBCon.from('tbl_check_list').select(
+				"checkup_equipment",
+				"checkup_status",
+				"checkup_item",
+				"checkup_time",
+				"checkup_cost",
+				"chc_id"
+			);
 		}
 		return checkList;
 	}
@@ -217,7 +217,7 @@ export default class BaseModel {
 		let departmentList = [];
 		if (query) {
 			departmentList = this.DBCon.select('*').from('tbl_department')
-			.where(query);
+				.where(query);
 		} else {
 			departmentList = this.DBCon.select('*').from('tbl_department');
 		}

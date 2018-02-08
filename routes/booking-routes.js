@@ -10,7 +10,7 @@ let bookings = new Booking(model);
 let jwtCheck = jwt({
     secret: config.secret
 });
-// app.use('/', jwtCheck);
+app.use('/', jwtCheck);
 app.get('/getBookingDataInfo', function(req, res) {
 	bookings.GetPatientBookingInfo(req, res)
 });

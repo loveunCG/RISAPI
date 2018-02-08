@@ -1,6 +1,6 @@
-# NodeJS JWT Authentication sample
+# API SERVER FOR APP (ANDROID and IOS)
 
-This is a NodeJS API that supports username and password authentication with JWTs and has APIs that return Chuck Norris phrases. How awesome is that?
+This is a API SERVER that supports username and password authentication with JWTs and has APIs that return Chuck Norris phrases. How awesome is that?
 
 ## Available APIs
 

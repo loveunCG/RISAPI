@@ -86,16 +86,16 @@ export default class ContactModel extends Base {
 		return RemoteData;
 	}
 
-	saveRomoteReview(data, where){
+	saveRomoteReview(data, where) {
 		return this.DBCon('tbl_contact_info')
-				.where(where)
-				.update(data);
+			.where(where)
+			.update(data);
 
 	}
 
-	saveContactMemberData(data){
+	saveContactMemberData(data) {
 		return this.DBCon('tbl_contact_member')
-				.insert(data);
+			.insert(data);
 	}
 
 	getRemoteView(query) {

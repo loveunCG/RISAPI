@@ -1,27 +1,28 @@
-let jwt = require('jsonwebtoken')
-let _ = require('lodash')
-let md5 = require('js-md5')
-let config = require('../config/config')
-let got = require('got')
+let jwt = require('jsonwebtoken');
+let _ = require('lodash');
+let md5 = require('js-md5');
+let config = require('../config/config');
+let got = require('got');
+const axios = require('axios');
 export default class Auth {
 	constructor(data) {
 		this.AuthModel = data
 		this.UserDatas = []
 	}
+
 	createToken(user) {
 		return jwt.sign(_.omit(user, 'password'), config.secret, {
 			expiresIn: 60 * 60 * 2
 		});
 	}
 
-	checkUser(req, res) {
-		let AuthSelf = this
+	async checkUser(req, res) {
+		let AuthSelf = this;
 		let userData = {
 			usr_id: req.query.username,
 			usr_passwd: md5(req.query.password)
-		}
-		if (!userData.usr_id ||
-			!req.query.password) {
+		};
+		if (!userData.usr_id || !req.query.password) {
 			return res.status(400).send("You must send the username and the password");
 		}
 		this.AuthModel.GetDoctorInfo(userData).then((params) => {
@@ -84,7 +85,7 @@ export default class Auth {
 		return data;
 	}
 
-	registerUser(req, res) {
+	async registerUser(req, res) {
 		let AuthSelf = this
 		let registerData = {
 			pat_id: req.query.phoneNum,
@@ -94,11 +95,17 @@ export default class Auth {
 			pat_IdNum: req.query.patIDNum,
 			pat_status: 1,
 			pat_create_time: (new Date()).toISOString().replace(/T/, ' ').replace(/\..+/, '')
-
+		};
+		let checkPhone = {
+			phonenum: req.query.phoneNum,
+			verify_code: req.query.smsCode
+		};
+		let resultCheck = await this.AuthModel.checkPhoneNumber(checkPhone);
+		if (!resultCheck.length) {
+			return response.send('Please insert correctly verify code!');
 		}
 		if (!registerData.pat_id || !req.query.password) {
-			return res.status(400).send(
-				"You must send the username and the password")
+			return res.status(400).send("You must send the username and the password");
 		}
 		AuthSelf.AuthModel.registerPatient(registerData).then(function(id) {
 			console.log(id)
@@ -166,22 +173,48 @@ export default class Auth {
 	}
 
 	SendSMS(request, response) {
-		let phonenum = request.query.phonenum
-		let url = config.smsUri
-		let smsContent = config.sms_content
-		smsContent += this.GetRandom(100000, 999999)
+		let AuthSelf = this;
+		let phonenum = 15698113717;
+		if (request.query.hasOwnProperty('phonenum')) {
+			phonenum = request.query.phonenum;
+		}
+		let url = config.smsUri;
+		let smsContent = config.sms_content;
+		let verify_code;
+		smsContent += verify_code = this.GetRandom(100000, 999999);
 		url += '&m=' + phonenum + '&c=' + smsContent;
-		console.log(encodeURI(url));
-		(async () => {
-			try {
-				const response = await got(url);
-				console.log(response);
-			} catch (error) {
-				console.log(error);
+		axios.get(encodeURI(url)).then(result => {
+			if (parseInt(result.data) == 0) {
+				let saveData = {
+					phonenum: phonenum,
+					verify_code: verify_code
+				};
+				let query = {
+					phonenum: phonenum
+				};
+				console.log(saveData);
+				AuthSelf.AuthModel.checkPhoneNumber(query).then(res => {
+					console.log(res);
+					AuthSelf.AuthModel.updatePhoneVerify(saveData, res.length).then(resdata => {
+						return response.json({
+							data: result.data
+						});
+					}).catch(err => {
+						return response.json({
+							data: 'error'
+						});
+					});
+				}).catch(err => {
+					return response.json({
+						data: 'error'
+					});
+				});
 			}
-		})();
-
-
+		}).catch(error => {  
+			return response.json({
+				data: 'error'
+			});
+		});
 	}
 
 	GetRandom(min, max) {

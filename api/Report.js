@@ -59,7 +59,7 @@ export default class Reporting {
 		let between = [startTime, endTime];
 		if (request.query.hasOwnProperty('patient_source')) query.patient_source = request.query.patient_source;
 		if (request.query.hasOwnProperty('booking_status')) query.booking_status = request.query.booking_status;
-		
+
 		this.ReportingModel.GetReportListInfo(query, between)
 			.then(data => {
 				let ReportData = [];
@@ -126,7 +126,7 @@ export default class Reporting {
 					return response.send(sendData);
 				}
 				var cnt = 0;
-				foreach(res, function (info, key, object) {
+				foreach(res, function(info, key, object) {
 					var query = {
 						chc_booking_id: info.pb_booking_id
 					};
@@ -185,9 +185,9 @@ export default class Reporting {
 		} else {
 			console.log('here is null');
 			return response.json([]);
-			return;
 		}
-		if (request.query.hasOwnProperty('report_doc_name')) saveData.report_doc_name = request.query.report_doc_name;
+		saveData.report_doc_name = userAuthData.usr_id;
+		// if (request.query.hasOwnProperty('report_doc_name')) saveData.report_doc_name = request.query.report_doc_name;
 		if (request.query.hasOwnProperty('clinical_diagnosis')) saveData.clinical_diagnosis = request.query.clinical_diagnosis;
 		if (request.query.hasOwnProperty('image_degree')) saveData.image_degree = request.query.image_degree;
 		if (request.query.hasOwnProperty('recommend_report')) saveData.recommend_report = request.query.recommend_report;
@@ -254,7 +254,7 @@ export default class Reporting {
 		console.log(query, deliBet, reportBet);
 		this.ReportingModel.getmyReportListInfo(query, reportBet, deliBet)
 			.then(data => {
-				
+
 				let ReportData = [];
 				console.log('this is report data', data)
 				if (data.length == 0) {
@@ -322,7 +322,7 @@ export default class Reporting {
 
 	deliberationList(request, response) {
 		let query = {};
-		query = this.getQueryRole();		
+		query = this.getQueryRole();
 		let startdate = new Date("2000-01-01");
 		let enddate = new Date("2100-01-01");
 		let defaultstart = startdate.getFullYear() + "-" + (startdate.getMonth() + 1) + "-" + startdate.getDate();
@@ -398,20 +398,21 @@ export default class Reporting {
 	}
 
 	dicomimg_list(request, response) {
-		if(request.query.hasOwnProperty('patient_id')){
+		if (request.query.hasOwnProperty('patient_id')) {
 			let getStudyIdUrl = dicomBaseUrl + 'getDicom?operation=cfind&patId=' + request.query.patient_id;
 			axios.get(getStudyIdUrl).then(studyIdData => {
 				this.getStudyIdList(studyIdData.data, response);
 			}).catch(error => {  
-				console.log(error);		
-				
+				console.log(error);
+
 			});
-		}else{
+		} else {
 
 		}
-		
+
 	}
-	getStudyIdList(data, response){
+
+	getStudyIdList(data, response) {
 		console.log('this is getting studyID');
 		var options = {
 			object: false,
@@ -423,11 +424,11 @@ export default class Reporting {
 			alternateTextNode: false
 		};
 		let stdData = parser.toJson(data, options);
-		if(JSON.parse(stdData).dicom.hasOwnProperty('response')){
+		if (JSON.parse(stdData).dicom.hasOwnProperty('response')) {
 			var resStudyData = JSON.parse(stdData).dicom.response;
 			let sendData = {};
-			for(var key in resStudyData.attr){
-				var tmpAttrData = resStudyData.attr[key];				
+			for (var key in resStudyData.attr) {
+				var tmpAttrData = resStudyData.attr[key];
 				switch (resStudyData.attr[key].tag) {
 					case '00100020':
 						sendData.patId = tmpAttrData['$t'];
@@ -446,52 +447,53 @@ export default class Reporting {
 						break;
 					case '0020000D':
 						sendData.studyUID = tmpAttrData['$t'];
-						break;								
+						break;
 					case '0020000E':
 						sendData.seriesUID = tmpAttrData['$t'];
-						break;					
+						break;
 					default:
 						break;
 				}
 			}
-			if(sendData.hasOwnProperty('studyUID')){
-				let getStudyIdUrl = dicomBaseUrl + 'getDicom?operation=cfind&studyUID=' + sendData.studyUID;				
+			if (sendData.hasOwnProperty('studyUID')) {
+				let getStudyIdUrl = dicomBaseUrl + 'getDicom?operation=cfind&studyUID=' + sendData.studyUID;
 				axios.get(getStudyIdUrl).then(resAjax => {
-					let allinData = parser.toJson(resAjax.data, options);					
-					var allinJson = JSON.parse(allinData);	
+					let allinData = parser.toJson(resAjax.data, options);
+					var allinJson = JSON.parse(allinData);
 					var qresponse = allinJson.dicom;
-					this.getRealListData(qresponse, response, sendData);				
-					
+					this.getRealListData(qresponse, response, sendData);
+
 				}).catch(error => {  
-					
+
 				});
 
-			}else{
+			} else {
 
 			}
-		}else{
+		} else {
 			return response.status(200).send({
-				data:[],
-				message:'there is no this patient Dicom'
+				data: [],
+				message: 'there is no this patient Dicom'
 			});
 
 		}
-		
+
 	}
-	getRealListData(data, res, patient_data){
-		var qresponse = data.qresponse;		
+
+	getRealListData(data, res, patient_data) {
+		var qresponse = data.qresponse;
 		var response = data.response;
 		var realSendDatas = [];
-		for(var index in response){
+		for (var index in response) {
 			var realSendData = {};
 			var objectUID = [];
-			// realSendData = patient_data;			
+			// realSendData = patient_data;
 			realSendData.number = response[index].number;
 			realSendData.studyMods = patient_data.studyMods;
 			realSendData.patName = patient_data.patName;
 			realSendData.patId = patient_data.patId;
-			var responseAttr = response[index].attr;		
-			for(var key in responseAttr){
+			var responseAttr = response[index].attr;
+			for (var key in responseAttr) {
 				switch (responseAttr[key].tag) {
 					case '00100020':
 						realSendData.patId = responseAttr[key]['$t'];
@@ -510,32 +512,33 @@ export default class Reporting {
 						break;
 					case '0020000D':
 						realSendData.studyUID = responseAttr[key]['$t'];
-						break;								
+						break;
 					case '0020000E':
 						realSendData.seriesUID = responseAttr[key]['$t'];
-						break;					
+						break;
 					default:
 						break;
 				}
-			}				
+			}
 			var objectIndex = 0;
-			for(var keyword in qresponse){				
-				if(qresponse[keyword].qrequest == realSendData.number ){
-
-					for(var incrementNum in qresponse[keyword].attr){
-						if(qresponse[keyword].attr[incrementNum].tag == '00080018'){							
-							objectUID[objectIndex] = {objectUID: qresponse[keyword].attr[incrementNum]['$t']};		
-							objectIndex++;			
+			for (var keyword in qresponse) {
+				if (qresponse[keyword].qrequest == realSendData.number) {
+					for (var incrementNum in qresponse[keyword].attr) {
+						if (qresponse[keyword].attr[incrementNum].tag == '00080018') {
+							objectUID[objectIndex] = {
+								objectUID: qresponse[keyword].attr[incrementNum]['$t']
+							};
+							objectIndex++;
 						}
 					}
 				}
 			}
 			realSendData.objectUID = (objectUID);
 			realSendDatas[index] = realSendData;
-		}		
-		return res.json(realSendDatas);		
+		}
+		return res.json(realSendDatas);
 
 	}
 
-	
+
 }
