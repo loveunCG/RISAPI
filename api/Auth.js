@@ -25,7 +25,7 @@ export default class Auth {
 		if (!userData.usr_id || !req.query.password) {
 			return res.status(400).send("You must send the username and the password");
 		}
-		this.AuthModel.GetDoctorInfo(userData).then((params) => {
+		this.AuthModel.getDoctorInfo(userData).then((params) => {
 			if (params.length < 1) {
 				let query = {
 					pat_id: req.query.username,
@@ -69,7 +69,6 @@ export default class Auth {
 							rle_doctor_id: params[0].id
 						});
 						userData.id_token = AuthSelf.createToken(userData);
-						// console.log(userData);
 						res.status(201).json(userData);
 					}
 					getRoleUserData();
@@ -79,14 +78,19 @@ export default class Auth {
 	}
 
 	async getUserRole(query) {
-		console.log(query);
 		const data = await this.AuthModel.getUserRole(query);
-		console.log(data);
 		return data;
 	}
 
 	async registerUser(req, res) {
-		let AuthSelf = this
+		let AuthSelf = this;
+		if (!req.query.hasOwnProperty('phoneNum') || !req.query.hasOwnProperty('password') ||
+			!req.query.hasOwnProperty('patName') || !req.query.hasOwnProperty('patIDNum') || !req.query.hasOwnProperty('smsCode')) {
+			return res.send('Please insert full field!');
+		}
+		if(req.query.password != req.query.rpassword){
+			return res.send('No Match Password!');
+		}
 		let registerData = {
 			pat_id: req.query.phoneNum,
 			pat_phone_num: req.query.phoneNum,
@@ -100,25 +104,25 @@ export default class Auth {
 			phonenum: req.query.phoneNum,
 			verify_code: req.query.smsCode
 		};
+		console.log(checkPhone);
 		let resultCheck = await this.AuthModel.checkPhoneNumber(checkPhone);
 		if (!resultCheck.length) {
-			return response.send('Please insert correctly verify code!');
+			return res.send('Please insert correctly verify code!');
 		}
 		if (!registerData.pat_id || !req.query.password) {
 			return res.status(400).send("You must send the username and the password");
 		}
 		AuthSelf.AuthModel.registerPatient(registerData).then(function(id) {
-			console.log(id)
 			let token = AuthSelf.createToken(registerData)
 			res.status(201).send({
 				id_token: token
 			});
 		}).catch(function(e) {
-			console.error(e)
+			console.error(e);
 		});
 	}
 
-	DuplicationCheck(req, res) {
+	duplicationCheck(req, res) {
 		let AuthSelf = this
 		if (req.query.phonenum == '') {
 			res.status(201).send({
@@ -128,7 +132,7 @@ export default class Auth {
 		let checkData = {
 			pat_id: req.query.phonenum
 		}
-		AuthSelf.AuthModel.CheckDuplicationId(checkData).then(function(params) {
+		this.AuthModel.CheckDuplicationId(checkData).then(function(params) {
 			if (params.length != 0) {
 				return res.status(201).send({
 					status: false
@@ -142,12 +146,19 @@ export default class Auth {
 		})
 	}
 
-	forgetPassword(req, res) {
-		let AuthSelf = this
-		if (req.query.pat_id == '' || req.query.password == '') {
-			res.status(201).json(false);
+	async forgetPassword(req, res) {
+		let AuthSelf = this;
+		if (!req.query.hasOwnProperty('pat_id') || !req.query.hasOwnProperty('password')||!req.query.hasOwnProperty('smsCode')) {
+			return res.status(201).json('Please insert full field!');
 		}
-
+		let checkPhone = {
+			phonenum: req.query.pat_id,
+			verify_code: req.query.smsCode
+		};
+		let resultCheck = await this.AuthModel.checkPhoneNumber(checkPhone);
+		if (!resultCheck.length) {
+			return response.send('Please insert correctly verify code!');
+		}
 		let query = {
 			pat_id: req.query.pat_id
 		}
@@ -165,7 +176,6 @@ export default class Auth {
 						status: false
 					});
 				}
-
 			})
 			.catch((err) => {
 
@@ -181,7 +191,7 @@ export default class Auth {
 		let url = config.smsUri;
 		let smsContent = config.sms_content;
 		let verify_code;
-		smsContent += verify_code = this.GetRandom(100000, 999999);
+		smsContent += verify_code = this.getRandomNumber(100000, 999999);
 		url += '&m=' + phonenum + '&c=' + smsContent;
 		axios.get(encodeURI(url)).then(result => {
 			if (parseInt(result.data) == 0) {
@@ -217,7 +227,8 @@ export default class Auth {
 		});
 	}
 
-	GetRandom(min, max) {
+	getRandomNumber(min, max) {
 		return Math.round(Math.random() * (max - min) + min);
 	}
+
 }

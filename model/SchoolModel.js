@@ -35,4 +35,79 @@ export default class SchoolModel extends Base {
 		return lessionInfo;
 	}
 
+	getPostInfo(query) {
+		let postDatas = [];
+		if (query) {
+			postDatas = this.DBCon.select('*').from('tbl_post').join('tbl_doctor', 'tbl_post.pst_doctor', '=', 'tbl_doctor.id').where(query);
+		} else {
+			postDatas = this.DBCon.select('*').from('tbl_post').join('tbl_doctor', 'tbl_post.pst_doctor', '=', 'tbl_doctor.id');
+		}
+		return postDatas;
+	}
+
+	getCommmentInfo(query) {
+		let comments = [];
+		if (query) {
+			comments = this.DBCon.from('tbl_comment')
+				.join('tbl_doctor', 'tbl_comment.cmt_doctor', '=', 'tbl_doctor.id')
+				.where(query)
+				.select(
+					"comment_id",
+					"cmt_content as content",
+					"usr_name as name",
+					"cmt_doctor"
+				);
+		} else {
+			comments = this.DBCon
+				.from('tbl_comment')
+				.join('tbl_doctor', 'tbl_comment.cmt_doctor', '=', 'tbl_doctor.id')
+				.select(
+					"comment_id",
+					"cmt_content as content",
+					"usr_name as name",
+					"cmt_doctor"
+				);
+		}
+		return comments;
+
+	}
+
+	getPostCommentInfo(query) {
+		postCommentInfo = [];
+		if (query) {
+			postCommentInfo = this.DBCon.select('*').from('tbl_comment')
+				.join('tbl_post', 'tbl_post.post_id', '=', 'tbl_comment.cmt_pst_id')
+				.where(query);
+		} else {
+			postCommentInfo = this.DBCon.select('*').from('tbl_comment')
+				.join('tbl_post', 'tbl_post.post_id', '=', 'tbl_comment.cmt_pst_id');
+		}
+		return postCommentInfo;
+	}
+
+	savePostInfo(saveData, id) {
+		if (id) {
+			return this.DBCon('tbl_post').where({
+				'post_id': id
+			}).update(saveData);
+
+		} else {
+			return this.DBCon('tbl_post').insert(saveData);
+
+		}
+
+	}
+
+	saveCommentInfo(saveData) {
+		if (id) {
+			return this.DBCon('tbl_post').where({
+				'post_id': id
+			}).update(saveData);
+
+		} else {
+			return this.DBCon('tbl_post').insert(saveData);
+
+		}
+	}
+
 }

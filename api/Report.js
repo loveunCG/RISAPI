@@ -9,8 +9,8 @@ let parser = require('xml2json');
 export default class Reporting {
 
 	constructor(data) {
-		this.ReportingModel = data
-		this.UserDatas = []
+		this.ReportingModel = data;
+		this.UserDatas = [];
 	}
 
 	getQueryRole() {
@@ -46,7 +46,7 @@ export default class Reporting {
 		}
 	}
 
-	ReportList(request, response) {
+	reportList(request, response) {
 		let query = {};
 		if (request.query.hasOwnProperty('hospital_name')) query.hospital_name = request.query.hospital_name;
 		query = this.getQueryRole();
@@ -54,13 +54,12 @@ export default class Reporting {
 		let enddate = new Date("2100-01-01");
 		let defaultstart = startdate.getFullYear() + "-" + (startdate.getMonth() + 1) + "-" + startdate.getDate();
 		let defaultend = enddate.getFullYear() + "-" + (enddate.getMonth() + 1) + "-" + enddate.getDate();
-		let startTime = request.query.hasOwnProperty('start') ? request.query.deliendtime : defaultstart;
-		let endTime = request.query.hasOwnProperty('end') ? request.query.deliendtime : defaultend;
+		let startTime = request.query.hasOwnProperty('start') ? request.query.start : defaultstart;
+		let endTime = request.query.hasOwnProperty('end') ? request.query.end : defaultend;
 		let between = [startTime, endTime];
 		if (request.query.hasOwnProperty('patient_source')) query.patient_source = request.query.patient_source;
 		if (request.query.hasOwnProperty('booking_status')) query.booking_status = request.query.booking_status;
-
-		this.ReportingModel.GetReportListInfo(query, between)
+		this.ReportingModel.getReportListInfo(query, between)
 			.then(data => {
 				let ReportData = [];
 				if (data.length == 0) {
@@ -95,7 +94,7 @@ export default class Reporting {
 
 	}
 
-	ReportDeatial(request, response, userData) {
+	reportDeatial(request, response, userData) {
 		let ReportingModel = this.ReportingModel;
 		var query = {};
 		if (request.query.hasOwnProperty('booking_id') && request.query.booking_id != "") {

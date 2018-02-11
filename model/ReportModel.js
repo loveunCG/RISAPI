@@ -6,7 +6,7 @@ export default class ReportModel extends Base {
 		super(data);
 	}
 
-	GetReportListInfo(query, between) {
+	getReportListInfo(query, between) {
 		var bookingData = [];
 		if (query) {
 			bookingData = this.DBCon('tbl_patient_booking')

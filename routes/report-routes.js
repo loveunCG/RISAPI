@@ -15,11 +15,11 @@ app.get('/checkauth', function(req, res) {
 	res.json({msg:"ok"});
 });
 app.get('/reportlist', function(req, res) {
-	reportings.ReportList(req, res, userAuthData);
+	reportings.reportList(req, res, userAuthData);
 });
 
 app.get('/reportdetail', function(req, res) {
-	reportings.ReportDeatial(req, res);
+	reportings.reportDeatial(req, res);
 });
 
 app.get('/reportingview', function(req, res) {
@@ -51,5 +51,5 @@ app.get('/test', function(req, res) {
 });
 
 app.get('/dicomimg_list', function(req, res){
-  reportings.dicomimg_list(req, res);  
+  reportings.dicomimg_list(req, res);
 });

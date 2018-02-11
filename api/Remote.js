@@ -72,7 +72,7 @@ export default class Booking {
 
 			var hospitalListData = await RemoteSelf.getHospitalList();
 			var deaprtmentData = await RemoteSelf.getDepartment();
-			var doctorInfo = await RemoteSelf.RemoteModels.GetDoctorInfo();
+			var doctorInfo = await RemoteSelf.RemoteModels.getDoctorInfo();
 			var sendDoctorInfo = [];
 			var hosDataSend = [];
 			var hospital_name = userAuthData.usr_hospital;

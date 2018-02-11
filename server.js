@@ -10,6 +10,7 @@ let logger = require('morgan'),
 let app = express();
 global.userAuthData = {};
 app.use(function(req, res, next) {
+	console.log(req.url);
 	if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
 		// return req.headers.authorization.split(' ')[1];
 		userAuthData = jwtToken.decode(req.headers.authorization.split(' ')[1]);
@@ -42,7 +43,6 @@ app.use('/api/remote', require('./routes/remote-routes'));
 app.use('/api/booking', require('./routes/booking-routes'));
 app.use('/api/auth', require('./routes/auth-routes'));
 app.use('/api/statistics', require('./routes/statistics-routes'));
-
 app.use(function(err, req, res, next) {
 	if (err.name === 'StatusError') {
 		res.send(err.status, err.message);
@@ -50,9 +50,7 @@ app.use(function(err, req, res, next) {
 		next(err);
 	}
 });
-
 var port = process.env.PORT;
-
 http.createServer(app).listen(port, function(err) {
 	console.log('listening in http://localhost:' + port);
 });

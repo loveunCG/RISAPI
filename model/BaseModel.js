@@ -4,7 +4,7 @@ export default class BaseModel {
 		this.DBCon = data;
 	}
 
-	GetDoctorInfo(query) {
+	getDoctorInfo(query) {
 		var users = [];
 		if (query) {
 			users = this.DBCon('tbl_doctor').where(query).select()
@@ -14,7 +14,7 @@ export default class BaseModel {
 		return users;
 	}
 
-	GetBookingAndCheckItemInfo(query) {
+	getBookingAndCheckItemInfo(query) {
 		var bookingData = [];
 		if (query) {
 

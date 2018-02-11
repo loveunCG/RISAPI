@@ -8,8 +8,8 @@ let jwtCheck = jwt({
     secret: config.secret
 });
 
-app.use('/api/protected', jwtCheck);
+app.use('/', jwtCheck);
 
-app.get('/api/protected/random-quote', function(req, res) {
+app.get('/', function(req, res) {
     res.status(200).send(quoter.getRandomOne());
 });

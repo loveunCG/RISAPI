@@ -24,7 +24,7 @@ export default class Booking {
 
 
 		} else {
-			this.BookingModel.GetBookingAndCheckItemInfo().then(function (data) {
+			this.BookingModel.getBookingAndCheckItemInfo().then(function (data) {
 				foreach(data, function (value, key, object) {
 					BookingData[key] = {
 						booking_id: value.booking_id,

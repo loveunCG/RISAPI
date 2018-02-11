@@ -17,7 +17,7 @@ app.get('/login', function(req, res) {
 
 // 사용자의 아이디증복을 검사하는 모듈
 app.get('/checkduplication', function(req, res){
-	auths.DuplicationCheck(req, res)
+	auths.duplicationCheck(req, res)
 });
 
 // 사용자가 암호를 잊었을때 처리를 위한 모듈

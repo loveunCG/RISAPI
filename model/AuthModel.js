@@ -4,54 +4,49 @@ export default class Auth {
 		this.DBCon = data;
 	}
 
-	GetDoctorInfo(query) {
+	getDoctorInfo(query) {
 		var users = [];
 		if (query) {
-			users = this.DBCon('tbl_doctor').where(query).select()
+			users = this.DBCon('tbl_doctor').where(query).select();
 		} else {
-			users = this.DBCon.select('*').from('tbl_doctor')
+			users = this.DBCon.select('*').from('tbl_doctor');
 		}
 		return users;
 	}
 
 	GetPatientInfo(query) {
-		let patient = []
+		let patient = [];
 		if (query) {
-			patient = this.DBCon('tbl_patient').where(query).select()
+			patient = this.DBCon('tbl_patient').where(query).select();
 		} else {
-			patient = this.DBCon('tbl_patient').where(query).select()
+			patient = this.DBCon('tbl_patient').where(query).select();
 		}
-		return patient
+		return patient;
 	}
 
 	registerPatient(data) {
-		let patient = this.DBCon.insert(data).into('tbl_patient')
-		return patient
+		let patient = this.DBCon.insert(data).into('tbl_patient');
+		return patient;
 	}
 
 	changePass(where, update) {
-		return this.DBCon('tbl_patient')
-			.where(where)
-			.update(update)
+		return this.DBCon('tbl_patient').where(where).update(update);
 	}
 
 	CheckDuplicationId(data) {
-		let result = []
-		console.log(data)
+		let result = [];
 		if (data.pat_id) {
-			result = this.DBCon('tbl_patient').where(data).select()
-			return result
+			result = this.DBCon('tbl_patient').where(data).select();
+			return result;
 		} else if (data.usr_id) {
-			result = this.DBCon('tbl_doctor').where(data).select()
-			return result
+			return result = this.DBCon('tbl_doctor').where(data).select();
 		} else {
-			return false
-
+			return false;
 		}
 	}
 
 	getUserRole(query) {
-		let userRole = []
+		let userRole = [];
 		if (query) {
 			userRole = this.DBCon('tbl_role').where(query).select("rle_name as role");
 		} else {
@@ -65,9 +60,7 @@ export default class Auth {
 	}
 
 	updatePhoneVerify(data, isSave) {
-		let query = {
-			phonenum: data.phonenum
-		};
+		let query = {phonenum: data.phonenum};
 		if (!isSave) {
 			console.log('insert');
 			return this.DBCon('tbl_phone_verify').insert(data);

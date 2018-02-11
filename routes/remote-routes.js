@@ -11,10 +11,10 @@ import RemoteModel from '../model/RemoteModel';
 let model = new RemoteModel(knex);
 let remotes = new Remote(model);
 
-app.use('/', jwtCheck);// 토큰의 검사를 위한 미들웨어
+app.use('/', jwtCheck); // authorization by token
 
 
-// 원격상담의 목록을 보여주기 위한 모듈
+// remote modulw
 app.get('/remoteList', function(req, res) {
 	remotes.remoteList(req, res);
 });
@@ -37,5 +37,5 @@ app.get('/remoteReviewList', function(req, res) {
 });
 
 app.get('/urlRomoteReviewListSave', function(req, res){
-  remotes.remoteReviewSave(req, res);  
+  remotes.remoteReviewSave(req, res);
 });
