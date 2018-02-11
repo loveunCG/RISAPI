@@ -1,10 +1,10 @@
 import Base from '../model/BaseModel'
 
-export default class StatisticsModel extends Base{
+export default class StatisticsModel extends Base {
 
-  constructor(data) {
+	constructor(data) {
 		super(data);
-  }
+	}
 
 	getBookingListInfo(query, between) {
 		var bookingData = [];
@@ -32,9 +32,11 @@ export default class StatisticsModel extends Base{
 	}
 
 	getReportListInfo(query, between) {
+		console.log('----------------------',query, between);
 		var reportData = [];
 		if (query) {
 			reportData = this.DBCon('tbl_patient_booking')
+				.leftJoin('tbl_check_list', 'tbl_check_list.chc_booking_id', '=', 'tbl_patient_booking.booking_id')
 				.leftJoin('tbl_report', 'tbl_report.booking_id', '=', 'tbl_patient_booking.booking_id')
 				.leftJoin('tbl_hospital', 'tbl_patient_booking.hospital_name', '=', 'tbl_hospital.hospital_name')
 				.where(query)
@@ -46,6 +48,7 @@ export default class StatisticsModel extends Base{
 		} else {
 			reportData = this.DBCon('tbl_patient_booking')
 				.leftJoin('tbl_report', 'tbl_report.booking_id', '=', 'tbl_patient_booking.booking_id')
+				.leftJoin('tbl_check_list', 'tbl_check_list.chc_booking_id', '=', 'tbl_patient_booking.booking_id')
 				.leftJoin('tbl_hospital', 'tbl_patient_booking.hospital_name', '=', 'tbl_hospital.hospital_name')
 				.whereBetween('report_time', between)
 				.groupBy('tbl_report.report_id')

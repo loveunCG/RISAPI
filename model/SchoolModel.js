@@ -98,15 +98,13 @@ export default class SchoolModel extends Base {
 
 	}
 
-	saveCommentInfo(saveData) {
+	saveCommentInfo(saveData, id) {
 		if (id) {
-			return this.DBCon('tbl_post').where({
+			return this.DBCon('tbl_comment').where({
 				'post_id': id
 			}).update(saveData);
-
 		} else {
-			return this.DBCon('tbl_post').insert(saveData);
-
+			return this.DBCon('tbl_comment').insert(saveData);
 		}
 	}
 

@@ -1,6 +1,8 @@
 var fileList = require('node-filelist');
 var fs = require('fs');
 var path = require('path');
+let moment = require('moment');
+
 export default class School {
 
 	constructor(data) {
@@ -107,8 +109,9 @@ export default class School {
 			let save_data = {
 				pst_title: request.query.pst_title,
 				pst_content: request.query.pst_content,
-				pst_doctor: userAuthData.usr_id,
-				pst_name: userAuthData.usr_name
+				pst_doctor: userAuthData.id,
+				pst_name: userAuthData.usr_name,
+				pst_time: moment().format('YYYY-MM-DD h:mm:ss')
 			}
 			if (request.query.hasOwnProperty('post_id')) {
 				this.LessionModel.savePostInfo(save_data, request.query.post_id).then(data => {
@@ -119,7 +122,9 @@ export default class School {
 					});
 			} else {
 				this.LessionModel.savePostInfo(save_data).then(data => {
-						return response.send(data);
+						return response.send({
+							status: 'success'
+						});
 					})
 					.catch(e => {
 						return response.send('could not save Post data!');
@@ -130,32 +135,43 @@ export default class School {
 		}
 
 	}
-	
+
 	saveComment(request, response) {
 
 		if (request.query.hasOwnProperty('cmt_content') && request.query.hasOwnProperty('cmt_pst_id')) {
 			let save_data = {
 				cmt_content: request.query.cmt_content,
 				cmt_pst_id: request.query.cmt_pst_id,
-				cmt_doctor: userAuthData.usr_id
+				cmt_doctor: userAuthData.id,
+				cmt_time: moment().format('YYYY-MM-DD h:mm:ss')
 			}
+			console.log(save_data);
 			if (request.query.hasOwnProperty('comment_id')) {
 				this.LessionModel.saveCommentInfo()(save_data, request.query.comment_id).then(data => {
-						return response.send(data);
+						return response.send({
+							status: 'success'
+						});
+
 					})
 					.catch(e => {
 						return response.send('could not save Post data!');
 					});
 			} else {
 				this.LessionModel.saveCommentInfo(save_data).then(data => {
-						return response.send(data);
+						return response.send({
+							status: 'success'
+						});
 					})
 					.catch(e => {
-						return response.send('could not save Post data!');
+						return response.send({
+							error: 'error'
+						});
 					});
 			}
 		} else {
-			return response.send('Please Insert correctly data');
+			return response.send({
+				error: 'error'
+			});
 		}
 
 	}

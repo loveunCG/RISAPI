@@ -28,9 +28,28 @@ app.get('/urlStatisticsPatient', function(req, res) {
 });
 
 app.get('/urlStatisticsReport', function(req, res) {
-	statistic.getReportInfo(req, res);
+	req.check('data_type', 'data_type is required').notEmpty();
+	req.check('chat_type', 'chat_type is required').notEmpty();
+	var errors = req.validationErrors();
+	if (errors) {
+		res.send({data:errors});
+	} else {
+		statistic.getReportData(req, res);
+	}
+
 });
 
 app.get('/urlStatisticsRemote', function(req, res) {
-	statistic.getRemoteInfo(req, res);
+	req.check('data_type', 'data_type is required').notEmpty();
+	req.check('chat_type', 'chat_type is required').notEmpty();
+	var errors = req.validationErrors();
+	if (errors) {
+		res.send({data:errors});
+	} else {
+		statistic.getRemoteData(req, res);
+	}
+});
+
+app.get('/urlStatisticsHospital', function(req, res) {
+	statistic.getHospitalList(req, res);
 });
