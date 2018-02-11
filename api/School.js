@@ -130,6 +130,7 @@ export default class School {
 		}
 
 	}
+	
 	saveComment(request, response) {
 
 		if (request.query.hasOwnProperty('cmt_content') && request.query.hasOwnProperty('cmt_pst_id')) {

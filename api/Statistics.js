@@ -1,3 +1,5 @@
+let moment = require('moment');
+
 export default class Statistics {
 	constructor(data) {
 		this.StatisticsModel = data
@@ -53,78 +55,78 @@ export default class Statistics {
 			case 1:
 				this.getReportStatisticsInfo(query, response);
 				break;
-			case 2:		
+			case 2:
 				this.getRemoteStatisticsInfo(query, response);
 				break;
 			case 3:
-			 	this.getdeliverationStatisticsInfo(query, response);
+				this.getdeliverationStatisticsInfo(query, response);
 				break;
 			default:
 				break;
 		}
 	}
 
-	getPatientStatisticsInfo(params, response){
+	getPatientStatisticsInfo(params, response) {
 		let StatisticsSelf = this;
 		var chartType = params.dateType;
 		var monthDate = {
-			"1":31,
-			"2":28,
-			"3":31,
-			"4":30,
-			"5":31,
-			"6":30,
-			"7":31,
-			"8":31,
-			"9":30,
-			"10":31,
-			"11":30,
-			"12":31
-		}		
-		var months = {
-			"1":"01",
-			"2":"02",
-			"3":"03",
-			"4":"04",
-			"5":"05",
-			"6":"06",
-			"7":"07",
-			"8":"08",
-			"9":"09",
-			"10":"10",
-			"11":"11",
-			"12":"12"
+			"1": 31,
+			"2": 28,
+			"3": 31,
+			"4": 30,
+			"5": 31,
+			"6": 30,
+			"7": 31,
+			"8": 31,
+			"9": 30,
+			"10": 31,
+			"11": 30,
+			"12": 31
 		}
-		var curtDate  = params.date;
-		
+		var months = {
+			"1": "01",
+			"2": "02",
+			"3": "03",
+			"4": "04",
+			"5": "05",
+			"6": "06",
+			"7": "07",
+			"8": "08",
+			"9": "09",
+			"10": "10",
+			"11": "11",
+			"12": "12"
+		}
+		var curtDate = params.date;
+
 		let realQuery = this.getQueryRole();
 		switch (parseInt(chartType)) {
-			case 0:	
+			case 0:
 				var month = parseInt(curtDate.split('-')[1]);
 				console.log(monthDate[month]);
 				var queryarray = {};
 				for (var index = 0; index < monthDate[month]; index++) {
-					queryarray[index] = [curtDate+'-0'+index+' 00:00:00', curtDate+'-0'+index+' 23:59:59'];
+					queryarray[index] = [curtDate + '-0' + index + ' 00:00:00', curtDate + '-0' + index + ' 23:59:59'];
 
 				}
-				getBookingInfoByDate(realQuery, queryarray);				
+				getBookingInfoByDate(realQuery, queryarray);
 				break;
-			case 1:		
-				var queryarray = {};		
+			case 1:
+				var queryarray = {};
 				for (var index = 1; index < 13; index++) {
-					queryarray[index] = [curtDate+'-'+months[index]+'-01 00:00:00', curtDate+'-'+months[index]+'-'+monthDate[index]+' 23:59:59'];										
-				} 
+					queryarray[index] = [curtDate + '-' + months[index] + '-01 00:00:00', curtDate + '-' + months[index] + '-' + monthDate[index] + ' 23:59:59'];
+				}
 				console.log(queryarray);
-				getBookingInfoByDate(realQuery, queryarray);			    	
+				getBookingInfoByDate(realQuery, queryarray);
 				break;
 			case 2:
-				var queryarray = {};	
+				var queryarray = {};
 				for (var index = 0; index < 10; index++) {
 					var years = parseInt(curtDate) - index;
-					queryarray[years] = [years+'-01-01 00:00:00', years+'-12-31 23:59:59'];										
+					queryarray[years] = [years + '-01-01 00:00:00', years + '-12-31 23:59:59'];
 				}
-				getBookingInfoByDate(realQuery, queryarray);		  	
-				break;		
+				getBookingInfoByDate(realQuery, queryarray);
+				break;
 			default:
 				break;
 		}
@@ -132,7 +134,7 @@ export default class Statistics {
 		async function getBookingInfoByDate(query, params) {
 			// console.log(params)
 			var sendData = [];
-			var date=[];
+			var date = [];
 			var index = 0;
 			for (var key in params) {
 				console.log(params[key]);
@@ -141,72 +143,77 @@ export default class Statistics {
 				sendData[index] = data.length;
 				index++;
 
-		   }
-		   response.send({data: sendData, date: date});
-		   return;					
+			}
+			response.send({
+				data: sendData,
+				date: date
+			});
+			return;
 		}
-		
+
 
 	}
 
-	getReportStatisticsInfo(params, response){
+	getReportStatisticsInfo(params, response) {
 		let StatisticsSelf = this;
 		var chartType = params.dateType;
 		var monthDate = {
-			"1":31,
-			"2":28,
-			"3":31,
-			"4":30,
-			"5":31,
-			"6":30,
-			"7":31,
-			"8":31,
-			"9":30,
-			"10":31,
-			"11":30,
-			"12":31
-		}		
-		var months = {
-			"1":"01",
-			"2":"02",
-			"3":"03",
-			"4":"04",
-			"5":"05",
-			"6":"06",
-			"7":"07",
-			"8":"08",
-			"9":"09",
-			"10":"10",
-			"11":"11",
-			"12":"12"
+			"1": 31,
+			"2": 28,
+			"3": 31,
+			"4": 30,
+			"5": 31,
+			"6": 30,
+			"7": 31,
+			"8": 31,
+			"9": 30,
+			"10": 31,
+			"11": 30,
+			"12": 31
 		}
-		var curtDate  = params.date;
-		let realQuery = {'report_doc_name': userAuthData.usr_id };
+		var months = {
+			"1": "01",
+			"2": "02",
+			"3": "03",
+			"4": "04",
+			"5": "05",
+			"6": "06",
+			"7": "07",
+			"8": "08",
+			"9": "09",
+			"10": "10",
+			"11": "11",
+			"12": "12"
+		}
+		var curtDate = params.date;
+		let realQuery = {
+			'report_doc_name': userAuthData.usr_id
+		};
 		switch (parseInt(chartType)) {
-			case 0:	
+			case 0:
 				var month = parseInt(curtDate.split('-')[1]);
 				var queryarray = {};
 				for (var index = 0; index < monthDate[month]; index++) {
-					queryarray[index] = [curtDate+'-0'+index+' 00:00:00', curtDate+'-0'+index+' 23:59:59'];
+					queryarray[index] = [curtDate + '-0' + index + ' 00:00:00', curtDate + '-0' + index + ' 23:59:59'];
 				}
-				getReportByDate(realQuery, queryarray);				
+				getReportByDate(realQuery, queryarray);
 				break;
-			case 1:		
-				var queryarray = {};		
+			case 1:
+				var queryarray = {};
 				for (var index = 1; index < 13; index++) {
-					queryarray[index] = [curtDate+'-'+months[index]+'-01 00:00:00', curtDate+'-'+months[index]+'-'+monthDate[index]+' 23:59:59'];										
-				} 
+					queryarray[index] = [curtDate + '-' + months[index] + '-01 00:00:00', curtDate + '-' + months[index] + '-' + monthDate[index] + ' 23:59:59'];
+				}
 				console.log(queryarray);
-				getReportByDate(realQuery, queryarray);			    	
+				getReportByDate(realQuery, queryarray);
 				break;
 			case 2:
-				var queryarray = {};	
+				var queryarray = {};
 				for (var index = 0; index < 10; index++) {
 					var years = parseInt(curtDate) - index;
-					queryarray[years] = [years+'-01-01 00:00:00', years+'-12-31 23:59:59'];										
+					queryarray[years] = [years + '-01-01 00:00:00', years + '-12-31 23:59:59'];
 				}
-				getReportByDate(realQuery, queryarray);		  	
-				break;		
+				getReportByDate(realQuery, queryarray);
+				break;
 			default:
 				break;
 		}
@@ -222,71 +229,74 @@ export default class Statistics {
 				sendData[index] = data.length;
 				index++;
 
-		   }
-		   response.json({data: sendData, date:date});
-		   return;					
+			}
+			response.json({
+				data: sendData,
+				date: date
+			});
+			return;
 		}
 
 	}
 
-	getRemoteStatisticsInfo(params, response){
+	getRemoteStatisticsInfo(params, response) {
 		let StatisticsSelf = this;
 		var chartType = params.dateType;
 		var monthDate = {
-			"1":31,
-			"2":28,
-			"3":31,
-			"4":30,
-			"5":31,
-			"6":30,
-			"7":31,
-			"8":31,
-			"9":30,
-			"10":31,
-			"11":30,
-			"12":31
-		};		
+			"1": 31,
+			"2": 28,
+			"3": 31,
+			"4": 30,
+			"5": 31,
+			"6": 30,
+			"7": 31,
+			"8": 31,
+			"9": 30,
+			"10": 31,
+			"11": 30,
+			"12": 31
+		};
 		var months = {
-			"1":"01",
-			"2":"02",
-			"3":"03",
-			"4":"04",
-			"5":"05",
-			"6":"06",
-			"7":"07",
-			"8":"08",
-			"9":"09",
-			"10":"10",
-			"11":"11",
-			"12":"12"
+			"1": "01",
+			"2": "02",
+			"3": "03",
+			"4": "04",
+			"5": "05",
+			"6": "06",
+			"7": "07",
+			"8": "08",
+			"9": "09",
+			"10": "10",
+			"11": "11",
+			"12": "12"
 		};
 
-		var curtDate  = params.date;
+		var curtDate = params.date;
 		let realQuery = this.getQueryRole();
 		switch (parseInt(chartType)) {
-			case 0:	
+			case 0:
 				var month = parseInt(curtDate.split('-')[1]);
 				var queryarray = {};
 				for (var index = 0; index < monthDate[month]; index++) {
-					queryarray[index] = [curtDate+'-0'+index+' 00:00:00', curtDate+'-0'+index+' 23:59:59'];
+					queryarray[index] = [curtDate + '-0' + index + ' 00:00:00', curtDate + '-0' + index + ' 23:59:59'];
 				}
-				getRemoteInfo(realQuery, queryarray);				
+				getRemoteInfo(realQuery, queryarray);
 				break;
-			case 1:		
-				var queryarray = {};		
+			case 1:
+				var queryarray = {};
 				for (var index = 1; index < 13; index++) {
-					queryarray[index] = [curtDate+'-'+months[index]+'-01 00:00:00', curtDate+'-'+months[index]+'-'+monthDate[index]+' 23:59:59'];										
-				} 
-				getRemoteInfo(realQuery, queryarray);			    	
+					queryarray[index] = [curtDate + '-' + months[index] + '-01 00:00:00', curtDate + '-' + months[index] + '-' + monthDate[index] + ' 23:59:59'];
+				}
+				getRemoteInfo(realQuery, queryarray);
 				break;
 			case 2:
-				var queryarray = {};	
+				var queryarray = {};
 				for (var index = 0; index < 10; index++) {
 					var years = parseInt(curtDate) - index;
-					queryarray[years] = [years+'-01-01 00:00:00', years+'-12-31 23:59:59'];										
+					queryarray[years] = [years + '-01-01 00:00:00', years + '-12-31 23:59:59'];
 				}
-				getRemoteInfo(realQuery, queryarray);		  	
-				break;		
+				getRemoteInfo(realQuery, queryarray);
+				break;
 			default:
 				break;
 		}
@@ -300,74 +310,77 @@ export default class Statistics {
 				date[index] = key;
 				sendData[index] = data.length;
 				index++;
-		   }
-		   response.send({data:sendData, date:date});
-		   console.log(sendData);
-		   return;					
+			}
+			response.send({
+				data: sendData,
+				date: date
+			});
+			console.log(sendData);
+			return;
 		}
 
 	}
 
-	getdeliverationStatisticsInfo(params, response){
+	getdeliverationStatisticsInfo(params, response) {
 		let StatisticsSelf = this;
 		var chartType = params.dateType;
 		var monthDate = {
-			"1":31,
-			"2":28,
-			"3":31,
-			"4":30,
-			"5":31,
-			"6":30,
-			"7":31,
-			"8":31,
-			"9":30,
-			"10":31,
-			"11":30,
-			"12":31
-		}		
-		var months = {
-			"1":"01",
-			"2":"02",
-			"3":"03",
-			"4":"04",
-			"5":"05",
-			"6":"06",
-			"7":"07",
-			"8":"08",
-			"9":"09",
-			"10":"10",
-			"11":"11",
-			"12":"12"
+			"1": 31,
+			"2": 28,
+			"3": 31,
+			"4": 30,
+			"5": 31,
+			"6": 30,
+			"7": 31,
+			"8": 31,
+			"9": 30,
+			"10": 31,
+			"11": 30,
+			"12": 31
 		}
-		var curtDate  = params.date;
+		var months = {
+			"1": "01",
+			"2": "02",
+			"3": "03",
+			"4": "04",
+			"5": "05",
+			"6": "06",
+			"7": "07",
+			"8": "08",
+			"9": "09",
+			"10": "10",
+			"11": "11",
+			"12": "12"
+		}
+		var curtDate = params.date;
 		//userAuthData.usr_name
-		let realQuery = {};//{doctor_name: userAuthData.usr_name };
+		let realQuery = {}; //{doctor_name: userAuthData.usr_name };
 		switch (parseInt(chartType)) {
-			case 0:	
+			case 0:
 				var month = parseInt(curtDate.split('-')[1]);
 				console.log(monthDate[month]);
 				var queryarray = {};
 				for (var index = 0; index < monthDate[month]; index++) {
-					queryarray[index] = [curtDate+'-0'+index+' 00:00:00', curtDate+'-0'+index+' 23:59:59'];
+					queryarray[index] = [curtDate + '-0' + index + ' 00:00:00', curtDate + '-0' + index + ' 23:59:59'];
 				}
-				getDeliberation(realQuery, queryarray);				
+				getDeliberation(realQuery, queryarray);
 				break;
-			case 1:		
-				var queryarray = {};		
+			case 1:
+				var queryarray = {};
 				for (var index = 1; index < 13; index++) {
-					queryarray[index] = [curtDate+'-'+months[index]+'-01 00:00:00', curtDate+'-'+months[index]+'-'+monthDate[index]+' 23:59:59'];										
-				} 
+					queryarray[index] = [curtDate + '-' + months[index] + '-01 00:00:00', curtDate + '-' + months[index] + '-' + monthDate[index] + ' 23:59:59'];
+				}
 				console.log(queryarray);
-				getDeliberation(realQuery, queryarray);			    	
+				getDeliberation(realQuery, queryarray);
 				break;
 			case 2:
-				var queryarray = {};	
+				var queryarray = {};
 				for (var index = 0; index < 10; index++) {
 					var years = parseInt(curtDate) - index;
-					queryarray[years] = [years+'-01-01 00:00:00', years+'-12-31 23:59:59'];										
+					queryarray[years] = [years + '-01-01 00:00:00', years + '-12-31 23:59:59'];
 				}
-				getDeliberation(realQuery, queryarray);		  	
-				break;		
+				getDeliberation(realQuery, queryarray);
+				break;
 			default:
 				break;
 		}
@@ -381,14 +394,30 @@ export default class Statistics {
 				var data = await StatisticsSelf.StatisticsModel.getDeliList(query, params[key]);
 				date[index] = key;
 				sendData[index] = data.length;
-				index++;		   
+				index++;
 			}
-		   response.json({data: sendData, date: date});
-		   console.log({data: sendData, date: date});
-		   return;					
+			response.json({
+				data: sendData,
+				date: date
+			});
+			console.log({
+				data: sendData,
+				date: date
+			});
+			return;
 		}
 
 	}
 
+	getBookingData(req, res) {
+		let data_type = req.query.data_type;
+		let date_part = req.query.hasOwnProperty('date_part') ? req.query.date_part : moment().format('YYYY-MM-DD');
+		if (!moment(date_part).isValid()) {
+			res.send({
+				error: 'date vaild errors'
+			});
+		}
+		res.send(date_part)
+	}
 
 }

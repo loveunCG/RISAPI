@@ -1,4 +1,5 @@
 require('import-export');
+let expressValidator = require('express-validator');
 let logger = require('morgan'),
 	cors = require('cors'),
 	http = require('http'),
@@ -37,6 +38,7 @@ if (process.env.NODE_ENV === 'development') {
 	app.use(logger('dev'));
 	app.use(errorhandler())
 }
+app.use(expressValidator());
 app.use('/api/report', require('./routes/report-routes'));
 app.use('/api/study', require('./routes/school-routes'));
 app.use('/api/remote', require('./routes/remote-routes'));

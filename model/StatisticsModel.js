@@ -21,7 +21,7 @@ export default class StatisticsModel extends Base{
 		} else {
 			bookingData = this.DBCon('tbl_patient_booking')
 				.leftJoin('tbl_report', 'tbl_report.booking_id', '=', 'tbl_patient_booking.booking_id')
-				.leftJoin('tbl_hospital', 'tbl_patient_booking.hospital_name', '=', 'tbl_hospital.hospital_name')				
+				.leftJoin('tbl_hospital', 'tbl_patient_booking.hospital_name', '=', 'tbl_hospital.hospital_name')
 				.whereBetween('booking_time', between)
 				.groupBy('tbl_patient_booking.booking_id')
 				.select(
@@ -46,7 +46,7 @@ export default class StatisticsModel extends Base{
 		} else {
 			reportData = this.DBCon('tbl_patient_booking')
 				.leftJoin('tbl_report', 'tbl_report.booking_id', '=', 'tbl_patient_booking.booking_id')
-				.leftJoin('tbl_hospital', 'tbl_patient_booking.hospital_name', '=', 'tbl_hospital.hospital_name')		
+				.leftJoin('tbl_hospital', 'tbl_patient_booking.hospital_name', '=', 'tbl_hospital.hospital_name')
 				.whereBetween('report_time', between)
 				.groupBy('tbl_report.report_id')
 				.select(
@@ -63,7 +63,7 @@ export default class StatisticsModel extends Base{
 				.leftJoin('tbl_patient_booking', 'tbl_patient_booking.booking_id', '=', 'tbl_contact_info.patient_id')
 				.where(query)
 				.whereBetween('submit_time', between)
-				.groupBy('contact_id')				
+				.groupBy('contact_id')
 				.select(
 					"patient_name",
 				);
@@ -71,8 +71,8 @@ export default class StatisticsModel extends Base{
 			RemoteData = this.DBCon.from('tbl_contact_info')
 				.leftJoin('tbl_patient_booking', 'tbl_patient_booking.booking_id', '=', 'tbl_contact_info.patient_id')
 				.whereBetween('submit_time', between)
-				.groupBy('contact_id')		
-				.select(	
+				.groupBy('contact_id')
+				.select(
 					"contact_id",
 				);
 		}
@@ -89,8 +89,10 @@ export default class StatisticsModel extends Base{
 			.whereBetween('deliberation_time', deliTime)
 			.groupBy('deliberation_id')
 			.select(
-				"image_num"				
+				"image_num"
 			);
 		return bookingData;
 	}
+
+
 }
