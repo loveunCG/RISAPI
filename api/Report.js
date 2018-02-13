@@ -14,9 +14,7 @@ export default class Reporting {
 	}
 
 	getQueryRole() {
-		console.log(userAuthData.usr_role);
 		switch (userAuthData.usr_role) {
-
 			case 1024:
 				return {};
 				break;

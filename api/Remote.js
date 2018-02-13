@@ -1,6 +1,6 @@
 let moment = require('moment');
 
-export default class Booking {
+export default class Remote {
 
 	constructor(data) {
 		this.RemoteModels = data

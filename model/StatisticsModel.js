@@ -32,7 +32,6 @@ export default class StatisticsModel extends Base {
 	}
 
 	getReportListInfo(query, between) {
-		console.log('----------------------',query, between);
 		var reportData = [];
 		if (query) {
 			reportData = this.DBCon('tbl_patient_booking')
@@ -96,6 +95,5 @@ export default class StatisticsModel extends Base {
 			);
 		return bookingData;
 	}
-
 
 }

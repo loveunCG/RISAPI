@@ -103,7 +103,6 @@ export default class Statistics {
 		switch (parseInt(chartType)) {
 			case 0:
 				var month = parseInt(curtDate.split('-')[1]);
-				console.log(monthDate[month]);
 				var queryarray = {};
 				for (var index = 0; index < monthDate[month]; index++) {
 					queryarray[index] = [curtDate + '-0' + index + ' 00:00:00', curtDate + '-0' + index + ' 23:59:59'];
@@ -116,7 +115,6 @@ export default class Statistics {
 				for (var index = 1; index < 13; index++) {
 					queryarray[index] = [curtDate + '-' + months[index] + '-01 00:00:00', curtDate + '-' + months[index] + '-' + monthDate[index] + ' 23:59:59'];
 				}
-				console.log(queryarray);
 				getBookingInfoByDate(realQuery, queryarray);
 				break;
 			case 2:
@@ -130,14 +128,13 @@ export default class Statistics {
 			default:
 				break;
 		}
-
 		async function getBookingInfoByDate(query, params) {
 			// console.log(params)
 			var sendData = [];
 			var date = [];
 			var index = 0;
 			for (var key in params) {
-				console.log(params[key]);
+				// console.log(params[key]);
 				var data = await StatisticsSelf.StatisticsModel.getBookingListInfo(query, params[key]);
 				date[index] = key;
 				sendData[index] = data.length;
@@ -150,8 +147,6 @@ export default class Statistics {
 			});
 			return;
 		}
-
-
 	}
 
 	getReportStatisticsInfo(params, response) {
@@ -203,7 +198,7 @@ export default class Statistics {
 				for (var index = 1; index < 13; index++) {
 					queryarray[index] = [curtDate + '-' + months[index] + '-01 00:00:00', curtDate + '-' + months[index] + '-' + monthDate[index] + ' 23:59:59'];
 				}
-				console.log(queryarray);
+				// console.log(queryarray);
 				getReportByDate(realQuery, queryarray);
 				break;
 			case 2:
@@ -219,7 +214,7 @@ export default class Statistics {
 		}
 
 		async function getReportByDate(query, params) {
-			console.log(params)
+			// console.log(params)
 			var sendData = [];
 			var date = [];
 			var index = 0;
@@ -315,7 +310,7 @@ export default class Statistics {
 				data: sendData,
 				date: date
 			});
-			console.log(sendData);
+			// console.log(sendData);
 			return;
 		}
 
@@ -358,7 +353,7 @@ export default class Statistics {
 		switch (parseInt(chartType)) {
 			case 0:
 				var month = parseInt(curtDate.split('-')[1]);
-				console.log(monthDate[month]);
+				// console.log(monthDate[month]);
 				var queryarray = {};
 				for (var index = 0; index < monthDate[month]; index++) {
 					queryarray[index] = [curtDate + '-0' + index + ' 00:00:00', curtDate + '-0' + index + ' 23:59:59'];
@@ -370,7 +365,7 @@ export default class Statistics {
 				for (var index = 1; index < 13; index++) {
 					queryarray[index] = [curtDate + '-' + months[index] + '-01 00:00:00', curtDate + '-' + months[index] + '-' + monthDate[index] + ' 23:59:59'];
 				}
-				console.log(queryarray);
+				// console.log(queryarray);
 				getDeliberation(realQuery, queryarray);
 				break;
 			case 2:
@@ -386,7 +381,7 @@ export default class Statistics {
 		}
 
 		async function getDeliberation(query, params) {
-			console.log(query);
+			// console.log(query);
 			var sendData = [];
 			var date = [];
 			var index = 0;
@@ -400,14 +395,12 @@ export default class Statistics {
 				data: sendData,
 				date: date
 			});
-			console.log({
-				data: sendData,
-				date: date
-			});
+
 			return;
 		}
 
 	}
+
 	getBookingData(req, res) {
 		let data_type = req.query.data_type;
 		var chartType = req.query.chat_type;
@@ -455,7 +448,7 @@ export default class Statistics {
 		switch (parseInt(chartType)) {
 			case 0:
 				var month = parseInt(curtDate.split('-')[1]);
-				console.log(monthDate[month]);
+				// console.log(monthDate[month]);
 				var queryarray = {};
 				for (var index = 0; index < monthDate[month]; index++) {
 					queryarray[index] = [curtDate + '-0' + index + ' 00:00:00', curtDate + '-0' + index + ' 23:59:59'];
@@ -467,12 +460,12 @@ export default class Statistics {
 				for (var index = 1; index < 13; index++) {
 					queryarray[index] = [curtDate + '-' + months[index] + '-01 00:00:00', curtDate + '-' + months[index] + '-' + monthDate[index] + ' 23:59:59'];
 				}
-				console.log(queryarray);
+				// console.log(queryarray);
 				getBookingInfoByDate(realQuery, queryarray);
 				break;
 			case 2:
 				var queryarray = {};
-				for (var index = 0; index < 10; index++) {
+				for (var index = 0; index < 5; index++) {
 					var years = parseInt(curtDate) - index;
 					queryarray[years] = [years + '-01-01 00:00:00', years + '-12-31 23:59:59'];
 				}
@@ -487,7 +480,6 @@ export default class Statistics {
 			var date = [];
 			var index = 0;
 			for (var key in params) {
-				console.log(params[key]);
 				var data = await StatisticsSelf.StatisticsModel.getBookingListInfo(query, params[key]);
 				date[index] = key;
 				sendData[index] = data.length;
@@ -548,7 +540,6 @@ export default class Statistics {
 			'report_doc_name': userAuthData.usr_id
 		};
 		if (device_type) realQuery.checkup_type = device_type;
-		console.log(realQuery);
 		switch (parseInt(chartType)) {
 			case 0:
 				var month = parseInt(curtDate.split('-')[1]);
@@ -563,12 +554,12 @@ export default class Statistics {
 				for (var index = 1; index < 13; index++) {
 					queryarray[index] = [curtDate + '-' + months[index] + '-01 00:00:00', curtDate + '-' + months[index] + '-' + monthDate[index] + ' 23:59:59'];
 				}
-				console.log(queryarray);
+				// console.log(queryarray);
 				getReportByDate(realQuery, queryarray);
 				break;
 			case 2:
 				var queryarray = {};
-				for (var index = 0; index < 10; index++) {
+				for (var index = 0; index < 5; index++) {
 					var years = parseInt(curtDate) - index;
 					queryarray[years] = [years + '-01-01 00:00:00', years + '-12-31 23:59:59'];
 				}
@@ -579,7 +570,6 @@ export default class Statistics {
 		}
 
 		async function getReportByDate(query, params) {
-			console.log(params)
 			var sendData = [];
 			var date = [];
 			var index = 0;
@@ -653,7 +643,7 @@ export default class Statistics {
 				break;
 			case 1:
 				var queryarray = {};
-				for (var index = 1; index < 13; index++) {
+				for (var index = 1; index < 5; index++) {
 					queryarray[index] = [curtDate + '-' + months[index] + '-01 00:00:00', curtDate + '-' + months[index] + '-' + monthDate[index] + ' 23:59:59'];
 				}
 				getRemoteInfo(realQuery, queryarray);
@@ -716,17 +706,17 @@ export default class Statistics {
 				};
 				break;
 			default:
-				query = NULL;
+				query = null;
 
 		}
 
 		this.StatisticsModel.getHospitalList(query).then(data => {
 			let send_data = [];
 			for (var key in data) {
-				send_data[key] = data[key].hospital_name;
+				send_data[key].hospital_name = data[key].hospital_name;
 			}
 			return res.send({
-				hospital_name: send_data,
+				data: send_data,
 				response_code: 1
 			});
 		}).catch(err => {

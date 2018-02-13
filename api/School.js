@@ -86,10 +86,12 @@ export default class School {
 			return response.send('there is no post data');
 		}
 		let send_data = [];
-		let comments = await this.LessionModel.getCommmentInfo();
 		for (var key in postDatas) {
-
 			let post_id = postDatas[key].post_id;
+			let query = {
+				cmt_pst_id: post_id
+			}
+			let comments = await this.LessionModel.getCommmentInfo(query);
 			send_data[key] = {
 				"author": postDatas[key].usr_name,
 				"post_id": post_id,
@@ -115,23 +117,41 @@ export default class School {
 			}
 			if (request.query.hasOwnProperty('post_id')) {
 				this.LessionModel.savePostInfo(save_data, request.query.post_id).then(data => {
-						return response.send(data);
+						return response.send({
+							data: null,
+							message: 'successfuly!',
+							response_code: 1
+						});
 					})
 					.catch(e => {
-						return response.send('could not save Post data!');
+						return response.send({
+							data: null,
+							message: 'could not save Post data!',
+							response_code: 0
+						});
 					});
 			} else {
 				this.LessionModel.savePostInfo(save_data).then(data => {
 						return response.send({
-							status: 'success'
+							data: null,
+							message: 'successfuly!',
+							response_code: 1
 						});
 					})
 					.catch(e => {
-						return response.send('could not save Post data!');
+						return response.send({
+							data: null,
+							message: 'could not save Post data!',
+							response_code: 0
+						});
 					});
 			}
 		} else {
-			return response.send('Please Insert correctly data');
+			return response.send({
+				data: null,
+				message: 'Please Insert correctly data',
+				response_code: 0
+			});
 		}
 
 	}
@@ -145,35 +165,112 @@ export default class School {
 				cmt_doctor: userAuthData.id,
 				cmt_time: moment().format('YYYY-MM-DD h:mm:ss')
 			}
-			console.log(save_data);
 			if (request.query.hasOwnProperty('comment_id')) {
-				this.LessionModel.saveCommentInfo()(save_data, request.query.comment_id).then(data => {
+				this.LessionModel.saveCommentInfo(save_data, request.query.comment_id).then(data => {
 						return response.send({
-							status: 'success'
+							data: null,
+							message: 'successfuly',
+							response_code: 1
 						});
-
 					})
 					.catch(e => {
-						return response.send('could not save Post data!');
+						return response.send({
+							data: null,
+							message: 'could not save Post data!',
+							response_code: 0
+						});
 					});
 			} else {
 				this.LessionModel.saveCommentInfo(save_data).then(data => {
 						return response.send({
-							status: 'success'
+							status: 'error',
+							message: 'could not save Post data!',
+							response_code: 0
 						});
 					})
 					.catch(e => {
 						return response.send({
-							error: 'error'
+							data: null,
+							message: 'could not save Post data!',
+							response_code: 0
 						});
 					});
 			}
 		} else {
 			return response.send({
-				error: 'error'
+				data: null,
+				message: 'please insert full parameter',
+				response_code: 0
 			});
 		}
 
+	}
+
+	async deleteComment(request, response) {
+		let query = {
+			comment_id: request.query.comment_id
+		}
+		let postData = await this.LessionModel.getCommmentInfo(query);
+		console.log(postData[0].cmt_doctor, userAuthData.id);
+
+		if (postData[0].cmt_doctor == userAuthData.id) {
+			console.log(query);
+			this.LessionModel.deleteCommentInfo(query).then(data => {
+				if (data) {
+					return response.send({
+						data: null,
+						message: 'could not save Post data!',
+						response_code: 0
+					});
+				} else {
+					return response.send({
+						status: 'error',
+						message: 'could not delete Comment Data!',
+						response_code: 0
+					});
+				}
+			});
+		} else {
+
+			return response.send({
+				status: 'error',
+				message: 'could not delete Comment Data!',
+				response_code: 0
+			});
+
+		}
+
+	}
+
+	async deletePost(request, response) {
+		let query = {
+			post_id: request.query.post_id
+		}
+		let postData = await this.LessionModel.getPostInfo(query);
+		if (postData[0].pst_doctor == userAuthData.id) {
+			this.LessionModel.deletePostInfo(query).then(data => {
+				if (data) {
+					return response.send({
+						data: null,
+						message: 'successfuly',
+						response_code: 1
+					});
+				} else {
+					return response.send({
+						status: 'error',
+						message: 'could not delete Post data!',
+						response_code: 0
+					});
+				}
+
+			});
+		} else {
+			return response.send({
+				status: 'error',
+				message: 'could not delete Post data!',
+				response_code: 0
+			});
+		}
 	}
 
 }

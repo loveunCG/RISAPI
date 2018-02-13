@@ -99,13 +99,30 @@ export default class SchoolModel extends Base {
 	}
 
 	saveCommentInfo(saveData, id) {
+
 		if (id) {
 			return this.DBCon('tbl_comment').where({
-				'post_id': id
+				'comment_id': id
 			}).update(saveData);
 		} else {
 			return this.DBCon('tbl_comment').insert(saveData);
 		}
 	}
 
+	deletePostInfo(query) {
+		if (query) {
+		 return this.DBCon.from('tbl_post').where(query).del();
+		} else {
+			return false;
+		}
+
+	}
+
+	deleteCommentInfo(query) {
+		if (query) {
+   		return  this.DBCon.from('tbl_comment').where(query).del();
+		} else {
+			return false;
+		}
+	}
 }
